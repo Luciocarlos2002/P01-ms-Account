@@ -17,6 +17,11 @@ public class AccountService {
     public Flux<Account> getAllAccount(){
         return accountRepository.findAll();
     }
+
+    public Flux<Account> getFindAccountByIdCustomer(String idCustomer){
+        return accountRepository.findAll().filter(x -> x.getIdCustomer().equals(idCustomer));
+    }
+
     public Mono<Account> getAccountById(String id){
         return  accountRepository.findById(id);
     }
@@ -30,9 +35,7 @@ public class AccountService {
                     bean.setNumberAccount(account.getNumberAccount());
                     bean.setKeyAccount(account.getKeyAccount());
                     bean.setAvailableBalanceAccount(account.getAvailableBalanceAccount());
-                    bean.setDateCreationAccount(account.getDateCreationAccount());
                     bean.setStatusAccount(account.getStatusAccount());
-                    bean.setIdEmployeeCreation(account.getIdEmployeeCreation());
                     bean.setIdCustomer(account.getIdCustomer());
                     return accountRepository.save(bean);
                 });

@@ -1,5 +1,6 @@
 package com.microservice.account.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/account")
@@ -27,7 +29,7 @@ public class AccountController{
 
     private final AccountService accountService;
 
-    @GetMapping
+    @GetMapping(value = "/allAccounts")
     public Mono<ResponseEntity<Flux<Account>>>getAllAccount() {
         Flux<Account> list=this.accountService.getAllAccount();
         return  Mono.just(ResponseEntity.ok()
@@ -35,20 +37,20 @@ public class AccountController{
                 .body(list));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}")
     public Mono<ResponseEntity<Account>> getAccountById(@PathVariable String id){
         var account=this.accountService.getAccountById(id);
         return account.map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping(value = "/create")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Account> create(@RequestBody Account account){
         return this.accountService.createAccount(account);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/update/{id}")
     public Mono<ResponseEntity<Account>> updateAccountById(@PathVariable String id, @RequestBody Account account){
 
         return this.accountService.updateAccount(id,account)
@@ -56,7 +58,7 @@ public class AccountController{
                 .defaultIfEmpty(ResponseEntity.badRequest().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public Mono<ResponseEntity<Void>> deleteAccountById(@PathVariable String id){
         return this.accountService.deleteAccount(id)
                 .map(r -> ResponseEntity.ok().<Void>build())

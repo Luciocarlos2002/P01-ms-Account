@@ -1,10 +1,13 @@
 package com.microservice.account.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -19,9 +22,9 @@ public class Account {
     private String numberAccount;
     private int keyAccount;
     private double availableBalanceAccount;
-    private String dateCreationAccount;
+    @JsonFormat(pattern="dd-MM-yyyy hh:mm:ss", timezone="GMT-05:00")
+    private Date dateCreationAccount = new Date();
     private String statusAccount;
-    private String idEmployeeCreation;
     private String idCustomer;
 
 
